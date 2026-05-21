@@ -1,0 +1,8 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "iostream": "cpp",
+        "string": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "/usr/bin/clang"
+}
