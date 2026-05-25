@@ -2,6 +2,8 @@
 Now, your task is to find the first and last occurrence of ‘k’ in 'arr*/
 
 //Code studio Problem: First and Last Position of an Element In Sorted Array
+
+//TC = O(n)
 pair<int, int> firstAndLastPosition(vector<int>& arr, int n, int k)
 {
     int start=-1, end=-1;
@@ -19,4 +21,61 @@ pair<int, int> firstAndLastPosition(vector<int>& arr, int n, int k)
     }
 
     return {start, end};
+}
+
+
+//Alternative better approach, with TC = O(logn)
+
+int firstocc(vector<int>& arr, int n, int k){
+    int s = 0, e=n-1;
+    int mid = s + (e-s)/2;
+    int ans1 = -1;
+
+    while(s<=e){
+        if(arr[mid] == k){
+            ans1 = mid;
+            e = mid -1;
+        }
+
+        else if(arr[mid]>k){
+            e = mid - 1;
+        }
+
+        else{
+            s = mid + 1;
+        }
+
+        mid = s + (e-s)/2;
+    }
+
+    return ans1;
+}
+
+int lastocc(vector<int>& arr, int n, int k){
+    int s = 0, e=n-1;
+    int mid = s + (e-s)/2;
+    int ans2 = -1;
+
+    while(s<=e){
+        if(arr[mid] == k){
+            ans2 = mid;
+            s = mid + 1;
+        }
+
+        else if(arr[mid]>k){
+            e = mid - 1;
+        }
+
+        else{
+            s = mid + 1;
+        }
+
+        mid = s + (e-s)/2;
+    }
+
+    return ans2;
+}
+pair<int, int> firstAndLastPosition(vector<int>& arr, int n, int k)
+{
+    return {firstocc(arr, n, k), lastocc(arr, n, k)};
 }
