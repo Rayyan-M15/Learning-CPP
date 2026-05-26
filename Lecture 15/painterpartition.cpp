@@ -1,102 +1,70 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-/*
-  Feasibility check:
-  Can we assign the boards (in order, contiguous) to <= painters such that
-  no painter paints more than maxLoad units (length sum)?
-*/
-bool canPaint(const vector<long long> &lengths, int paintersAllowed, long long maxLoad)
+int findLargestMinDistance(vector<int> &boards, int k)
 {
-    long long paintersUsed = 1;
-    long long currentSum = 0;
-    for (long long len : lengths)
-    {
-        if (len > maxLoad)
-            return false; // single board exceeds capacity
-        if (currentSum + len <= maxLoad)
-        {
-            currentSum += len;
-        }
-        else
-        {
-            ++paintersUsed;
-            if (paintersUsed > paintersAllowed)
-                return false;
-            currentSum = len;
-        }
-    }
-    return true;
-}
+    int low = boards[0];
+    int high = 0;
+    int size = boards.size();
 
-/*
-  Binary-search driver:
-  lower bound = max(lengths)
-  upper bound = sum(lengths)
-  returns minimal maximum-length any painter must handle.
-*/
-long long painterPartitionMinLoad(const vector<long long> &lengths, int painters)
-{
-    long long lo = 0, hi = 0;
-    for (long long x : lengths)
+    // calculating low = max in arr, high = sum of all arr elements
+    for (int i = 0; i < size; i++)
     {
-        hi += x;
-        lo = max(lo, x);
+        if (boards[i] > low)
+        {
+            low = boards[i];
+        }
+
+        high += boards[i];
     }
 
-    long long ans = hi;
-    while (lo <= hi)
+    int ans = -1;
+
+    while (low <= high)
     {
-        long long mid = lo + (hi - lo) / 2;
-        if (canPaint(lengths, painters, mid))
+        int mid = low + (high - low) / 2;
+        int paintercount = 1;
+        int currentboards = 0;
+
+        // same as book allocation
+        for (int j = 0; j < size; j++)
+        {
+            if (currentboards + boards[j] <= mid)
+            {
+                currentboards += boards[j];
+            }
+
+            else
+            {
+                paintercount++;
+                currentboards = boards[j];
+            }
+        }
+
+        // checking if the soln is possible
+        if (paintercount <= k)
         {
             ans = mid;
-            hi = mid - 1;
+            high = mid - 1;
         }
+
         else
         {
-            lo = mid + 1;
+            low = mid + 1;
         }
     }
+
     return ans;
 }
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    vector<int> boards = {10, 20, 30, 40};
 
-    // Interactive / contest-friendly input:
-    // First line: n k timePerUnit
-    // Next line: n integers (lengths)
-    //
-    // Example:
-    // 6 3 1
-    // 30 20 10 40 5 45
-    //
-    // Output: 50  (when timePerUnit = 1)
-    //
-    int n, k;
-    long long timePerUnit;
-    if (!(cin >> n >> k >> timePerUnit))
-    {
-        // If input not provided, run a built-in example and exit.
-        vector<long long> example = {30, 20, 10, 40, 5, 45};
-        int painters = 3;
-        long long minLoad = painterPartitionMinLoad(example, painters);
-        cout << (minLoad * 1) << '\n';
-        return 0;
-    }
+    int k = 2; // Number of painters
 
-    vector<long long> lengths(n);
-    for (int i = 0; i < n; ++i)
-        cin >> lengths[i];
+    cout << findLargestMinDistance(boards, k) << endl;
 
-    long long minLoadUnits = painterPartitionMinLoad(lengths, k);
-    long long resultTime = minLoadUnits * timePerUnit;
-
-    cout << resultTime << '\n';
+    return 0;
     return 0;
 }
