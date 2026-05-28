@@ -1,80 +1,74 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
-bool canPlaceCows(const vector<long long> &stalls, int cows, long long minDist)
+bool Possible(vector<int> &stalls, int k, int mid)
 {
-    int placed = 1; // place first cow at stalls[0]
-    long long lastPos = stalls[0];
 
-    for (size_t i = 1; i < stalls.size(); ++i)
+    int cowcount = 1;
+    int lastpos = stalls[0];
+
+    for (int i = 0; i < stalls.size(); i++)
     {
-        if (stalls[i] - lastPos >= minDist)
+
+        if (stalls[i] - lastpos >= mid)
         {
-            ++placed;
-            lastPos = stalls[i];
-            if (placed == cows)
+            cowcount++;
+
+            if (cowcount == k)
+            {
                 return true;
+            }
+
+            lastpos = stalls[i];
         }
     }
+
     return false;
 }
-
-long long maxMinDistance(vector<long long> &stalls, int cows)
+int aggressiveCows(vector<int> &stalls, int k)
 {
     sort(stalls.begin(), stalls.end());
+    int st = 0;
+    int e = stalls[0];
+    int size = stalls.size();
 
-    long long lo = 1;                              // minimal meaningful distance
-    long long hi = stalls.back() - stalls.front(); // maximal possible distance
-    long long ans = 0;
-
-    while (lo <= hi)
+    for (int i = 0; i < size; i++)
     {
-        long long mid = lo + (hi - lo) / 2;
-        if (canPlaceCows(stalls, cows, mid))
+        if (e <= stalls[i])
         {
-            ans = mid; // mid is feasible — try larger
-            lo = mid + 1;
-        }
-        else
-        {
-            hi = mid - 1; // mid not feasible — reduce
+            e = stalls[i];
         }
     }
+
+    int ans;
+    while (st <= e)
+    {
+        int mid = st + (e - st) / 2;
+
+        if (Possible(stalls, k, mid))
+        {
+            ans = mid;
+            st = mid + 1;
+        }
+
+        else
+        {
+            e = mid - 1;
+        }
+    }
+
     return ans;
 }
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    vector<int> stalls = {1, 2, 4, 8, 9};
 
-    // Input format (standard):
-    // T testcases
-    // For each testcase:
-    //   n (number of stalls) c (number of cows)
-    //   next line: n integers (positions)
-    //
-    // Example:
-    // 1
-    // 5 3
-    // 1 2 8 4 9
-    //
-    // Expected output for example: 3
+    int k = 3; // Number of cows
 
-    int T;
-    if (!(cin >> T))
-        return 0;
-    while (T--)
-    {
-        int n, c;
-        cin >> n >> c;
-        vector<long long> stalls(n);
-        for (int i = 0; i < n; ++i)
-            cin >> stalls[i];
+    cout << aggressiveCows(stalls, k) << endl;
 
-        cout << maxMinDistance(stalls, c) << '\n';
-    }
+    return 0;
+
     return 0;
 }
