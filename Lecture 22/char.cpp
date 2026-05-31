@@ -43,7 +43,7 @@ int main()
 {
     char ch[10] = {'r', 'a', 'y', 'y', 'a', 'n','\0', 'c', 'o'};
     char name[10];
-    cout << "Enter a word; ";
+    cout << "Enter a word: ";
     cin >> name;
 
     cout<<endl<<ch<<endl;
