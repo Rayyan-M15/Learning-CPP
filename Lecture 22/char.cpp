@@ -41,17 +41,20 @@ bool isPalindrome(string s)
 
 int main()
 {
-    char ch[10] = {'r', 'a', 'y', 'y', 'a', 'n','\0', 'c', 'o'};
+    char ch[10] = {'r', 'a', 'y', 'y', 'a', 'n', '\0', 'c', 'o'};
     char name[10];
     cout << "Enter a word: ";
     cin >> name;
 
-    cout<<endl<<ch<<endl;
+    cout << endl
+         << ch << endl;
 
-    cout << name << endl;
+    cout << "Word Entered: " << name << endl;
     cout << "Size of word: " << getlength(name) << endl;
     reverseString(name);
     cout << "Reversed word is: " << name << endl;
+
+    cout << "Is the string a palindrome?: " << boolalpha << isPalindrome(name) << endl;
 
     return 0;
 }
