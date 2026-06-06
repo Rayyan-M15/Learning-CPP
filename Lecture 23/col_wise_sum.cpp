@@ -1,18 +1,18 @@
 #include <iostream>
 using namespace std;
 
-void rowsum(int arr[][4], int row, int col)
+void colsum(int arr[][4], int row, int col)
 {
-    for (int i = 0; i < row; i++)
+    for (int j = 0; j < col; j++)
     {
         int sum = 0;
 
-        for (int j = 0; j < col; j++)
+        for (int i = 0; i < row; i++)
         {
             sum += arr[i][j];
         }
 
-        cout << "Sum of row " << i + 1 << " is " << sum << endl;
+        cout << "Sum of col " << j + 1 << " is " << sum << endl;
     }
 }
 
@@ -27,6 +27,6 @@ int main()
         }
     }
 
-    rowsum(arr, 3, 4);
+    colsum(arr, 3, 4);
     return 0;
 }
